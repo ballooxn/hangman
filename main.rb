@@ -1,4 +1,3 @@
-require "game_controller"
+require_relative "lib/game_controller"
 
-Game.load_dictionary
-Game.new
+GameController.new

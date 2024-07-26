@@ -1,5 +1,6 @@
 require_relative "display"
 require_relative "data_manager"
+require_relative "player"
 
 class GameController
   include Display
@@ -13,7 +14,7 @@ class GameController
   end
 
   def choose_random_line
-    result = ["oh yeah"]
+    result = ["_"]
     until result.length >= 5 && result.length <= 12
       line = rand(1..10_000)
       File.open(@file, "r") do |f|
@@ -46,9 +47,11 @@ class GameController
       p @selected_word = choose_random_line
       @guessed_word = Array.new(@selected_word.length, "-")
       Display.display_number_of_letters(@guessed_word)
+
+      player = Player.new
       until selected_word_guessed?
         Display.choose_letter
-        guess_letter = gets.chomp.downcase
+        guess_letter = player.choose_guess
         correct = make_feedback(guess_letter)
         if correct
           Display.display_feedback(@guessed_word)

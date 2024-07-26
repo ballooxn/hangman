@@ -8,6 +8,7 @@ class GameController
   def initialize
     @selected_word = []
     @guessed_word = []
+    @guessed_letters = []
     @file = "dictionary.txt"
     @rounds_won = 0
     start_game
@@ -36,13 +37,17 @@ class GameController
   end
 
   def game_loop
+    first_game = true
     Display.introduction
     game_over = false
     guesses_remaining = 6
     until game_over
-      puts "Do you wish to save your progress? (y/n)"
-      save_progress = gets.chomp.downcase
-      DataManager.save_game(@rounds_won) if save_progress == "y"
+      unless first_game == true
+        endputs "Do you wish to save your progress? (y/n)"
+        save_progress = gets.chomp.downcase
+        DataManager.save_game(@rounds_won) if save_progress == "y"
+      end
+      first_game = false
 
       p @selected_word = choose_random_line
       @guessed_word = Array.new(@selected_word.length, "-")
@@ -50,8 +55,10 @@ class GameController
 
       player = Player.new
       until selected_word_guessed?
+        Display.guessed_letters(@guessed_letters) unless @guessed_letters.empty?
         Display.choose_letter
         guess_letter = player.choose_guess
+        @guessed_letters << guess_letter
         correct = make_feedback(guess_letter)
         if correct
           Display.display_feedback(@guessed_word)

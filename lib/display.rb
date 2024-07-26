@@ -1,6 +1,8 @@
+require "rainbow"
+
 module Display
   def self.introduction
-    puts "Welcome to Hangman!"
+    puts Rainbow("Welcome to Hangman!").red
     puts "A random word will be chosen for you."
     puts "You must guess letters to complete the word."
     puts "You will have 6 attempts to guess the word."
@@ -12,15 +14,19 @@ module Display
   end
 
   def self.choose_letter
-    puts "Choose a letter:"
+    puts Rainbow("Choose a letter:").bright
+  end
+
+  def self.guessed_letters(guessed_letters)
+    puts Rainbow("Letters guessed: #{guessed_letters}").blue
   end
 
   def self.display_feedback(guessed_word)
-    puts "Current progress: #{guessed_word}"
+    puts Rainbow("Current progress: #{guessed_word}").green
   end
 
   def self.incorrect_guess(guesses_remaining)
-    puts "Incorrect guess. You have #{guesses_remaining} guesses remaining."
+    puts Rainbow("Incorrect guess. You have #{guesses_remaining} guesses remaining.").red
   end
 
   def self.congrats_message(rounds_won)

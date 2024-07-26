@@ -32,7 +32,6 @@ class GameController
     puts "Would you like to load a previous game? (y/n)"
     load_game = gets.chomp.downcase
     @rounds_won = DataManager.load_game if load_game == "y"
-    p @rounds_won
     game_loop
   end
 
@@ -49,7 +48,7 @@ class GameController
       end
       first_game = false
 
-      p @selected_word = choose_random_line
+      @selected_word = choose_random_line
       @guessed_word = Array.new(@selected_word.length, "-")
       Display.display_number_of_letters(@guessed_word)
 

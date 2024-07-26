@@ -1,14 +1,14 @@
 require_relative "display"
-
-# Hangman
+require_relative "data_manager"
 
 class GameController
   include Display
-  @@rounds_won = 0
+  include DataManager
   def initialize
     @selected_word = []
     @guessed_word = []
     @file = "dictionary.txt"
+    @rounds_won = 0
     start_game
   end
 
@@ -27,13 +27,22 @@ class GameController
   end
 
   def start_game
+    puts "Would you like to load a previous game? (y/n)"
+    load_game = gets.chomp.downcase
+    @rounds_won = DataManager.load_game if load_game == "y"
+    p @rounds_won
     game_loop
   end
 
   def game_loop
+    Display.introduction
     game_over = false
     guesses_remaining = 6
     until game_over
+      puts "Do you wish to save your progress? (y/n)"
+      save_progress = gets.chomp.downcase
+      DataManager.save_game(@rounds_won) if save_progress == "y"
+
       p @selected_word = choose_random_line
       @guessed_word = Array.new(@selected_word.length, "-")
       Display.display_number_of_letters(@guessed_word)
@@ -55,11 +64,11 @@ class GameController
 
       end
       # Word has been guessed
-      @@rounds_won += 1
-      Display.congrats_message(@@rounds_won)
+      @rounds_won += 1
+      Display.congrats_message(@rounds_won)
     end
     # The game is over
-    Display.game_over_message(@@rounds_won)
+    Display.game_over_message(@rounds_won)
     play_again = gets.chomp.downcase
     GameController.new if play_again == "y"
   end

@@ -8,7 +8,7 @@ module Display
   end
 
   def self.display_number_of_letters(guessed_word)
-    puts guessed_word.join("")
+    puts guessed_word.join
   end
 
   def self.choose_letter

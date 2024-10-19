@@ -16,11 +16,19 @@ module Display
   end
 
   def self.incorrect_guess(wrong_guesses_remaining)
-    puts "That guess was incorrect! You now have #{wrong_guesses_remaining} guesses left."
+    print "\nThat guess was incorrect! You now have #{wrong_guesses_remaining} guesses left."
+  end
+
+  def self.guessed_letters(arr)
+    print "\nLetters guessed: [ "
+    arr.each do |v|
+      print "#{v} "
+    end
+    print "]"
   end
 
   def self.round_won(rounds_won)
-    puts "\nCongrats, you guessed the word! You have won #{rounds_won} rounds."
+    puts "\n\nCongrats, you guessed the word! You have won #{rounds_won} rounds."
   end
 
   def self.game_over(rounds_won)

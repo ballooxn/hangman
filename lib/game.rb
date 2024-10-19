@@ -51,6 +51,7 @@ class Game
           @wrong_guesses_remaining -= 1
           Display.incorrect_guess(@wrong_guesses_remaining)
         end
+        Display.guessed_letters(@guessed_letters)
       end
       @rounds_won += 1
       Display.round_won(@rounds_won)

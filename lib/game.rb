@@ -35,7 +35,6 @@ class Game
       reset_words
       # Loop through guesses until secret word is guessed OR run out of tries
       until guessed_secret_word?
-        game_over = true if @wrong_guesses_remaining.zero?
         guess = Player.choose_guess(@guessed_letters)
         @guessed_letters.push(guess)
 
@@ -49,13 +48,19 @@ class Game
           Display.print_guessed_word(@guessed_word)
         else
           @wrong_guesses_remaining -= 1
+
+          if @wrong_guesses_remaining.zero?
+            game_over = true
+            break
+          end
           Display.incorrect_guess(@wrong_guesses_remaining)
         end
         Display.guessed_letters(@guessed_letters)
       end
-      @rounds_won += 1
-      Display.round_won(@rounds_won)
-
+      unless game_over
+        @rounds_won += 1
+        Display.round_won(@rounds_won)
+      end
     end
     Display.game_over(@rounds_won)
   end
@@ -68,6 +73,7 @@ class Game
     @secret_word = @dictionary.sample.chars
     p @secret_word
     @guessed_word = Array.new(@secret_word.length, "_")
+    @guessed_letters = []
   end
 
   # Add correctly guessed letters to the @guessed_word array

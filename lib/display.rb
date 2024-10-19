@@ -32,6 +32,6 @@ module Display
   end
 
   def self.game_over(rounds_won)
-    puts "Game over! You won #{rounds_won} rounds."
+    puts "\nGame over! You won #{rounds_won} rounds."
   end
 end

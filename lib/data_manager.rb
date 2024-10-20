@@ -5,7 +5,7 @@ module DataManager
   WORD_TWO = %w[Fox Panda Eagle Wolf Koala Otter Lion Owl Tiger Hawk].freeze
 
   def self.save_game(game_class)
-    FileUtils.mkdir_p("saves")
+    Dir.mkdir("saves") unless Dir.exist?("saves") # rubocop:disable Lint/NonAtomicFileOperation
     name = [WORD_ONE.sample, WORD_TWO.sample].join
     puts name
 
@@ -15,8 +15,7 @@ module DataManager
   end
 
   def self.load_game(name)
-    yaml = YAML.load_file("saves/#{name}.yml")
-    yaml[0]
+    YAML.unsafe_load_file("saves/#{name}.yml")
   end
 
   def self.valid_file_name?(name)

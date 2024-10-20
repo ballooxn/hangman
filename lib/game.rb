@@ -27,11 +27,21 @@ class Game
 
     unless answer == "new"
       @game_loaded = true
-      variables = DataManager.load_game(answer)
-      p variables
+      variables = DataManager.load_game(answer)[0]
+
+      load_variables(variables)
     end
 
     game_loop
+  end
+
+  def load_variables(variables)
+    @secret_word = variables.instance_variable_get(:@secret_word)
+    @guessed_word = variables.instance_variable_get(:@guessed_word)
+    @guessed_letters = variables.instance_variable_get(:@guessed_letters)
+    @rounds_won = variables.instance_variable_get(:@rounds_won)
+    @wrong_guesses_remaining = variables.instance_variable_get(:@wrong_guesses_remaining)
+    Display.print_guessed_word(@guessed_word)
   end
 
   protected
@@ -39,7 +49,6 @@ class Game
   def game_loop
     game_over = false
     until game_over
-      @wrong_guesses_remaining = MAX_GUESSES
       reset_words unless @game_loaded
       @game_loaded = false
 
@@ -86,6 +95,7 @@ class Game
     p @secret_word
     @guessed_word = Array.new(@secret_word.length, "_")
     @guessed_letters = []
+    @wrong_guesses_remaining = MAX_GUESSES
   end
 
   # Add correctly guessed letters to the @guessed_word array

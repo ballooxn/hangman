@@ -2,6 +2,9 @@ module Display
   def self.intro
     puts "Welcome to Hangman!"
     puts ""
+    puts "If you would like to load in a previous game, then type in the name of the save file."
+    puts "Else, type 'new'"
+    puts ""
   end
 
   def self.choose_guess

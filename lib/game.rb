@@ -7,7 +7,7 @@ class Game
   include Data_Manager
   include Player
 
-  MAX_GUESSES = 5
+  MAX_GUESSES = 7
 
   def initialize
     @dictionary = File.read("dictionary.txt").split
@@ -17,11 +17,16 @@ class Game
     @guessed_word = []
     @guessed_letters = []
 
+    @game_loaded = false
+
     @rounds_won = 0
   end
 
   def start_game
-    Display.intro
+    Display.intro # load game or new?
+    answer = ""
+    answer = gets.chomp.downcase until answer == "new" || Data_Manager.valid_file_name?(answer)
+
     game_loop
   end
 
@@ -33,16 +38,17 @@ class Game
       @wrong_guesses_remaining = MAX_GUESSES
 
       reset_words
+      @game_loaded = false
       # Loop through guesses until secret word is guessed OR run out of tries
       until guessed_secret_word?
         guess = Player.choose_guess(@guessed_letters)
-        @guessed_letters.push(guess)
 
         if guess == "save"
-          Data_Manager.save_game(@guessed_letters, @guessed_word, @secret_word, @wrong_guesses_remaining, @rounds_won)
+          Data_Manager.save_game(self)
           return
         end
 
+        @guessed_letters.push(guess)
         correct_guess = check_guess(guess)
         if correct_guess
           Display.print_guessed_word(@guessed_word)

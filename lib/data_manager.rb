@@ -1,11 +1,11 @@
 require "yaml"
 
-module Data_Manager
+module DataManager
   WORD_ONE = %w[Swift Clever Bold Glowing Dancing Mysterious Racing Curious Fearless Jumping].freeze
   WORD_TWO = %w[Fox Panda Eagle Wolf Koala Otter Lion Owl Tiger Hawk].freeze
 
   def self.save_game(game_class)
-    Dir.mkdir("saves") unless Dir.exist?("saves") # rubocop:disable Lint/NonAtomicFileOperation
+    FileUtils.mkdir_p("saves")
     name = [WORD_ONE.sample, WORD_TWO.sample].join
     puts name
 
@@ -14,7 +14,9 @@ module Data_Manager
     File.open("saves/#{name}.yml", "w") { |f| YAML.dump([] << game_class, f) }
   end
 
-  def self.load_game
+  def self.load_game(name)
+    yaml = YAML.load_file("saves/#{name}.yml")
+    yaml[0]
   end
 
   def self.valid_file_name?(name)

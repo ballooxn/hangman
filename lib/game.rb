@@ -4,7 +4,7 @@ require_relative "data_manager"
 
 class Game
   include Display
-  include Data_Manager
+  include DataManager
   include Player
 
   MAX_GUESSES = 7
@@ -16,16 +16,20 @@ class Game
     @secret_word = []
     @guessed_word = []
     @guessed_letters = []
-
     @game_loaded = false
-
     @rounds_won = 0
   end
 
   def start_game
     Display.intro # load game or new?
     answer = ""
-    answer = gets.chomp.downcase until answer == "new" || Data_Manager.valid_file_name?(answer)
+    answer = gets.chomp until answer == "new" || DataManager.valid_file_name?(answer)
+
+    unless answer == "new"
+      @game_loaded = true
+      variables = DataManager.load_game(answer)
+      p variables
+    end
 
     game_loop
   end
@@ -36,38 +40,40 @@ class Game
     game_over = false
     until game_over
       @wrong_guesses_remaining = MAX_GUESSES
-
-      reset_words
+      reset_words unless @game_loaded
       @game_loaded = false
+
       # Loop through guesses until secret word is guessed OR run out of tries
       until guessed_secret_word?
         guess = Player.choose_guess(@guessed_letters)
-
         if guess == "save"
-          Data_Manager.save_game(self)
+          DataManager.save_game(self)
           return
         end
 
         @guessed_letters.push(guess)
-        correct_guess = check_guess(guess)
+        correct_guess = process_guess(guess)
+
         if correct_guess
           Display.print_guessed_word(@guessed_word)
         else
           @wrong_guesses_remaining -= 1
-
           if @wrong_guesses_remaining.zero?
             game_over = true
             break
           end
           Display.incorrect_guess(@wrong_guesses_remaining)
         end
+
         Display.guessed_letters(@guessed_letters)
       end
+
       unless game_over
         @rounds_won += 1
         Display.round_won(@rounds_won)
       end
     end
+
     Display.game_over(@rounds_won)
   end
 
@@ -84,7 +90,7 @@ class Game
 
   # Add correctly guessed letters to the @guessed_word array
   # If no correct guesses then return false, else return true.
-  def check_guess(guess)
+  def process_guess(guess)
     number_correct = 0
     @secret_word.each_with_index do |v, i|
       if v == guess
@@ -92,9 +98,6 @@ class Game
         number_correct += 1
       end
     end
-
-    return if number_correct.zero?
-
-    true
+    number_correct > 0 # rubocop:disable Style/NumericPredicate
   end
 end

@@ -1,0 +1,27 @@
+---
+- !ruby/object:Game
+  dictionary:
+  secret_word:
+  - f
+  - i
+  - s
+  - h
+  - e
+  - r
+  - i
+  - e
+  - s
+  guessed_word:
+  - _
+  - _
+  - _
+  - _
+  - _
+  - _
+  - _
+  - _
+  - _
+  guessed_letters: []
+  game_loaded: false
+  rounds_won: 0
+  wrong_guesses_remaining: 7

@@ -1,8 +1,9 @@
 require "yaml"
 
 module DataManager
-  WORD_ONE = %w[Swift Clever Bold Glowing Dancing Mysterious Racing Curious Fearless Jumping].freeze
-  WORD_TWO = %w[Fox Panda Eagle Wolf Koala Otter Lion Owl Tiger Hawk].freeze
+  WORD_ONE = %w[Swift Clever Bold Glowing Dancing Mysterious Racing Curious Fearless Jumping Sneaky Brave Flying Fierce
+                Waatchful].freeze
+  WORD_TWO = %w[Fox Panda Eagle Wolf Koala Otter Lion Owl Tiger Hawk Bear Rabbit Shark Snake Cheetah Falcon].freeze
 
   def self.save_game(game_class)
     Dir.mkdir("saves") unless Dir.exist?("saves") # rubocop:disable Lint/NonAtomicFileOperation

@@ -6,6 +6,7 @@ module Player
   def self.choose_guess(guessed_letters)
     guess = "test"
     until valid_guess?(guess, guessed_letters)
+      Display.guessed_letters(guessed_letters)
       Display.choose_guess
       guess = gets.chomp.downcase
     end

@@ -73,8 +73,6 @@ class Game
           end
           Display.incorrect_guess(@wrong_guesses_remaining)
         end
-
-        Display.guessed_letters(@guessed_letters)
       end
 
       unless game_over
@@ -92,7 +90,6 @@ class Game
 
   def reset_words
     @secret_word = @dictionary.sample.chars
-    p @secret_word
     @guessed_word = Array.new(@secret_word.length, "_")
     @guessed_letters = []
     @wrong_guesses_remaining = MAX_GUESSES
